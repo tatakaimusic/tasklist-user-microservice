@@ -1,19 +1,24 @@
 package com.example.tasklistusermicroservice.model.User;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class User {
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(name = "email")
     private String email;
-
+    @Column(name = "username")
     private String username;
-
+    @Column(name = "password")
     private String password;
-
+    @Transient
     private String passwordConfirmation;
-
+    @Column(name = "phoneNumber")
     private String phoneNumber;
-
+    @Column(name = "role")
     private Role role;
 
     public User() {
