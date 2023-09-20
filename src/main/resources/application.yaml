@@ -6,3 +6,9 @@ spring:
     username: ${POSTGRES_USERNAME}
     password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    access: 3600000
+    refresh: 2592000000
