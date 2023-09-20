@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -26,6 +27,7 @@ public class ApplicationConfig {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
+    @Lazy
     public ApplicationConfig(ApplicationContext applicationContext, JwtTokenProvider jwtTokenProvider) {
         this.applicationContext = applicationContext;
         this.jwtTokenProvider = jwtTokenProvider;
@@ -61,7 +63,7 @@ public class ApplicationConfig {
                                 }))
                 )
                 .authorizeHttpRequests(configurer ->
-                        configurer.requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        configurer.requestMatchers("/api/v1/auth/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .anonymous(AbstractHttpConfigurer::disable)

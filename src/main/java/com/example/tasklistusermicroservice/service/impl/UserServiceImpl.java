@@ -5,6 +5,7 @@ import com.example.tasklistusermicroservice.model.user.User;
 import com.example.tasklistusermicroservice.repository.UserRepository;
 import com.example.tasklistusermicroservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,9 +13,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -34,7 +38,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
-        return userRepository.save(user);
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new IllegalStateException("User with this email already exists!");
+        }
+        if (!user.getPassword().equals(user.getPasswordConfirmation())) {
+            throw new IllegalStateException("Password and password confirmation don't match!");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole("ROLE_USER");
+        user = userRepository.save(user);
+        return user;
     }
 
     @Override

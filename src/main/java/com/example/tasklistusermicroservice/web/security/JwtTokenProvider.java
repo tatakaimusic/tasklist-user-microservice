@@ -1,6 +1,5 @@
 package com.example.tasklistusermicroservice.web.security;
 
-import com.example.tasklistusermicroservice.model.user.Role;
 import com.example.tasklistusermicroservice.model.user.User;
 import com.example.tasklistusermicroservice.service.impl.UserServiceImpl;
 import com.example.tasklistusermicroservice.service.properties.JwtProperties;
@@ -43,7 +42,7 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
     }
 
-    public String createAccessToken(Long userId, String username, Role role) {
+    public String createAccessToken(Long userId, String username, String role) {
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("id", userId);
         claims.put("role", role);

@@ -21,12 +21,12 @@ public class User implements Serializable {
     @Column(name = "phoneNumber")
     private String phoneNumber;
     @Column(name = "role")
-    private Role role;
+    private String role;
 
     public User() {
     }
 
-    public User(Long id, String email, String username, String password, String passwordConfirmation, String phoneNumber, Role role) {
+    public User(Long id, String email, String username, String password, String passwordConfirmation, String phoneNumber, String role) {
         this.id = id;
         this.email = email;
         this.username = username;
@@ -84,11 +84,11 @@ public class User implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 }
