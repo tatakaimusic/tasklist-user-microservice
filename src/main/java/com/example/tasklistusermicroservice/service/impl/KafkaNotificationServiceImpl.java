@@ -3,6 +3,7 @@ package com.example.tasklistusermicroservice.service.impl;
 import com.example.tasklistusermicroservice.model.Notification;
 import com.example.tasklistusermicroservice.model.user.User;
 import com.example.tasklistusermicroservice.service.KafkaNotificationService;
+import com.example.tasklistusermicroservice.web.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -20,7 +21,7 @@ public class KafkaNotificationServiceImpl implements KafkaNotificationService {
     }
 
     @Override
-    public void send(Notification notification, User user) {
+    public void send(Notification notification, UserDTO user) {
         String topic = switch (notification) {
             case REGISTRATION -> "notification-registration";
             case REMINDER -> "notification-reminder";

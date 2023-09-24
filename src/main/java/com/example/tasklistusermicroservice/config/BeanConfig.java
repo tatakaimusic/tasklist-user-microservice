@@ -13,6 +13,6 @@ public class BeanConfig {
 
     @Bean
     public XML producerXML() throws FileNotFoundException {
-        return new XMLDocument(new File("/src/main//resources/kafka/producer.xml"));
+        return new XMLDocument(new File("src/main/resources/kafka/producer.xml"));
     }
 }

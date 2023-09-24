@@ -6,6 +6,7 @@ import com.example.tasklistusermicroservice.model.user.User;
 import com.example.tasklistusermicroservice.repository.UserRepository;
 import com.example.tasklistusermicroservice.service.KafkaNotificationService;
 import com.example.tasklistusermicroservice.service.UserService;
+import com.example.tasklistusermicroservice.web.dto.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,11 +20,14 @@ public class UserServiceImpl implements UserService {
 
     private final KafkaNotificationService kafkaNotificationService;
 
+    private final UserMapper userMapper;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, KafkaNotificationService kafkaNotificationService) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, KafkaNotificationService kafkaNotificationService, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.kafkaNotificationService = kafkaNotificationService;
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -52,7 +56,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("ROLE_USER");
         user = userRepository.save(user);
-        kafkaNotificationService.send(Notification.REGISTRATION, user);
+        kafkaNotificationService.send(Notification.REGISTRATION, userMapper.toDTO(user));
         return user;
     }
 
