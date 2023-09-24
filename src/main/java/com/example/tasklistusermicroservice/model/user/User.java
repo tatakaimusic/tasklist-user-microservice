@@ -3,6 +3,7 @@ package com.example.tasklistusermicroservice.model.user;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
@@ -90,5 +91,18 @@ public class User implements Serializable {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(passwordConfirmation, user.passwordConfirmation) && Objects.equals(phoneNumber, user.phoneNumber) && Objects.equals(role, user.role);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, username, password, passwordConfirmation, phoneNumber, role);
     }
 }
