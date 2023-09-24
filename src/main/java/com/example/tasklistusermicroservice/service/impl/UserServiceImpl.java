@@ -1,8 +1,10 @@
 package com.example.tasklistusermicroservice.service.impl;
 
+import com.example.tasklistusermicroservice.model.Notification;
 import com.example.tasklistusermicroservice.model.exception.UserNotFoundException;
 import com.example.tasklistusermicroservice.model.user.User;
 import com.example.tasklistusermicroservice.repository.UserRepository;
+import com.example.tasklistusermicroservice.service.KafkaNotificationService;
 import com.example.tasklistusermicroservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,10 +17,13 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final KafkaNotificationService kafkaNotificationService;
+
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, KafkaNotificationService kafkaNotificationService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.kafkaNotificationService = kafkaNotificationService;
     }
 
     @Override
@@ -47,6 +52,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("ROLE_USER");
         user = userRepository.save(user);
+        kafkaNotificationService.send(Notification.REGISTRATION, user);
         return user;
     }
 
