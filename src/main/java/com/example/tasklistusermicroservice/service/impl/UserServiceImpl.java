@@ -10,8 +10,10 @@ import com.example.tasklistusermicroservice.web.dto.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -41,11 +43,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User update(User user) {
         return userRepository.save(user);
     }
 
     @Override
+    @Transactional
     public User create(User user) {
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new IllegalStateException("User with this email already exists!");
@@ -61,6 +65,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         userRepository.deleteById(id);
     }
